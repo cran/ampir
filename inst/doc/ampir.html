@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="author" content="Legana Fingerhut" />
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-05-11" />
 
 <title>Introduction to ampir</title>
 
@@ -118,9 +117,6 @@ padding-right: 2em;
 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 1.35;
-}
-#header {
-text-align: center;
 }
 #TOC {
 clear: both;
@@ -289,7 +285,8 @@ code > span.st { color: #d14; }
 code > span.co { color: #888888; font-style: italic; } 
 code > span.ot { color: #007020; } 
 code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
@@ -304,19 +301,19 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Introduction to ampir</h1>
 <h4 class="author">Legana Fingerhut</h4>
-<h4 class="date">2019-11-26</h4>
+<h4 class="date">2020-05-11</h4>
 
 
 
 <div id="background" class="section level1">
 <h1>Background</h1>
-<p>The <strong>ampir</strong> (short for <strong>a</strong>nti<strong>m</strong>icrobial <strong>p</strong>eptide prediction <strong>i</strong>n <strong>r</strong> ) package was designed to be a fast and user-friendly method to predict antimicrobial peptides (AMPs) from any given size protein dataset. <strong>ampir</strong> uses a <em>supervised statistical machine learning</em> approach to predict AMPs. It incorporates a support vector machine classification model that has been trained on publicly available antimicrobial peptide data.</p>
+<p>The <strong>ampir</strong> (short for <strong>a</strong>nti<strong>m</strong>icrobial <strong>p</strong>eptide prediction <strong>i</strong>n <strong>r</strong> ) package was designed to be a fast and user-friendly method to predict antimicrobial peptides (AMPs) from any given size protein dataset. <strong>ampir</strong> uses a <em>supervised statistical machine learning</em> approach to predict AMPs. It incorporates two support vector machine classification models, “precursor” and “mature” that have been trained on publicly available antimicrobial peptide data. The default model, “precursor” is best suited for full length proteins and the “mature” model is best suited for small mature proteins (&lt;60 amino acids). <strong>ampir</strong> also accepts custom (user trained) models based on the <a href="https://github.com/topepo/caret">caret</a> package. Please see the <strong>ampir</strong> <em>“How to train your model”</em> vignette for details.</p>
 <div id="usage" class="section level2">
 <h2>Usage</h2>
 <p>Standard input to <strong>ampir</strong> is a <code>data.frame</code> with sequence names in the first column and protein sequences in the second column.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(ampir)</a></code></pre></div>
 <p>Read in a FASTA formatted file as a <code>data.frame</code> with <code>read_faa()</code></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">my_protein_df &lt;-<span class="st"> </span><span class="kw">read_faa</span>(<span class="kw">system.file</span>(<span class="st">&quot;extdata/bat_protein.fasta&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;ampir&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">my_protein_df &lt;-<span class="st"> </span><span class="kw">read_faa</span>(<span class="kw">system.file</span>(<span class="st">&quot;extdata/little_test.fasta&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;ampir&quot;</span>))</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -326,14 +323,42 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">G1P6H5_MYOLU</td>
+<td align="left">tr|G1P6H5|G1P6H5_MYOLU</td>
 <td align="left">MALTVRIQAACLLLLLLASLTSYSLLLSQTTQLADLQTQDTAGAT…</td>
+</tr>
+<tr class="even">
+<td align="left">tr|L5L3D0|L5L3D0_PTEAL</td>
+<td align="left">MKPLLIVFVFLIFWDPALAGLNPISSEMYKKCYGNGICRLECYTS…</td>
+</tr>
+<tr class="odd">
+<td align="left">tr|A0A183U1F1|A0A183U1F1_TOXCA</td>
+<td align="left">LLRLYSPLVMFATRRVLLCLLVIYLLAQPIHSSWLKKTYKKLENS…</td>
+</tr>
+<tr class="even">
+<td align="left">tr|Q5F4I1|Q5F4I1_DROPS</td>
+<td align="left">MNFYKIFIFVALILAISVGQSEAGWLKKLGKRLERVGQHTRDATI…</td>
+</tr>
+<tr class="odd">
+<td align="left">tr|A7S075|A7S075_NEMVE</td>
+<td align="left">MFLKVVVVLLAVELSVAQSARQRVRPLDRKAGRKRFAPIFPRQCS…</td>
+</tr>
+<tr class="even">
+<td align="left">tr|F1DFM9|F1DFM9_9CNID</td>
+<td align="left">MKVLVILFGAMLVLMEFQKASAATLLEDFDDDDDLLDDGGDFDLE…</td>
+</tr>
+<tr class="odd">
+<td align="left">tr|Q5XV93|Q5XV93_ARATH</td>
+<td align="left">MSKREYERQLANEEDEQLRNFQAAVAARSAILHEPKEAALPPPAP…</td>
+</tr>
+<tr class="even">
+<td align="left">tr|Q2XXN9|Q2XXN9_POGBA</td>
+<td align="left">MRFLYLLFAVAFLFSVQAEDAELEQEQQGDPWEGLDEFQDQPPDD…</td>
 </tr>
 </tbody>
 </table>
-<p>Calculate the probability that each protein is an antimicrobial peptide with <code>predict_amps()</code></p>
-<p><em>Note that amino acid sequences that are shorter than five amino acids long and/or contain anything other than the standard 20 amino acids are not evaluated and will contain an <code>NA</code> as their <code>prob_AMP</code> value.</em></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">my_prediction &lt;-<span class="st"> </span><span class="kw">predict_amps</span>(my_protein_df)</a></code></pre></div>
+<p>Calculate the probability that each protein is an antimicrobial peptide with <code>predict_amps()</code> using the default “precursor” model.</p>
+<p><em>Note that amino acid sequences that are shorter than 10 amino acids long and/or contain anything other than the standard 20 amino acids are not evaluated and will contain an <code>NA</code> as their <code>prob_AMP</code> value.</em></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">my_prediction &lt;-<span class="st"> </span><span class="kw">predict_amps</span>(my_protein_df, <span class="dt">model =</span> <span class="st">&quot;precursor&quot;</span>)</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -344,30 +369,72 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">G1P6H5_MYOLU</td>
+<td align="left">tr|G1P6H5|G1P6H5_MYOLU</td>
 <td align="left">MALTVRIQAACLLLLLLASLTSYSLLLSQTTQLADLQTQDTAGAT…</td>
-<td align="right">0.934</td>
+<td align="right">0.359</td>
+</tr>
+<tr class="even">
+<td align="left">tr|L5L3D0|L5L3D0_PTEAL</td>
+<td align="left">MKPLLIVFVFLIFWDPALAGLNPISSEMYKKCYGNGICRLECYTS…</td>
+<td align="right">0.839</td>
+</tr>
+<tr class="odd">
+<td align="left">tr|A0A183U1F1|A0A183U1F1_TOXCA</td>
+<td align="left">LLRLYSPLVMFATRRVLLCLLVIYLLAQPIHSSWLKKTYKKLENS…</td>
+<td align="right">0.019</td>
+</tr>
+<tr class="even">
+<td align="left">tr|Q5F4I1|Q5F4I1_DROPS</td>
+<td align="left">MNFYKIFIFVALILAISVGQSEAGWLKKLGKRLERVGQHTRDATI…</td>
+<td align="right">0.986</td>
+</tr>
+<tr class="odd">
+<td align="left">tr|A7S075|A7S075_NEMVE</td>
+<td align="left">MFLKVVVVLLAVELSVAQSARQRVRPLDRKAGRKRFAPIFPRQCS…</td>
+<td align="right">0.023</td>
+</tr>
+<tr class="even">
+<td align="left">tr|F1DFM9|F1DFM9_9CNID</td>
+<td align="left">MKVLVILFGAMLVLMEFQKASAATLLEDFDDDDDLLDDGGDFDLE…</td>
+<td align="right">0.237</td>
+</tr>
+<tr class="odd">
+<td align="left">tr|Q5XV93|Q5XV93_ARATH</td>
+<td align="left">MSKREYERQLANEEDEQLRNFQAAVAARSAILHEPKEAALPPPAP…</td>
+<td align="right">0.010</td>
+</tr>
+<tr class="even">
+<td align="left">tr|Q2XXN9|Q2XXN9_POGBA</td>
+<td align="left">MRFLYLLFAVAFLFSVQAEDAELEQEQQGDPWEGLDEFQDQPPDD…</td>
+<td align="right">0.650</td>
 </tr>
 </tbody>
 </table>
 <p>Predicted proteins with a specified predicted probability value could then be extracted and written to a FASTA file:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">my_predicted_amps &lt;-<span class="st"> </span>my_protein_df[my_prediction[,<span class="dv">3</span>] <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.8</span>,]</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">my_predicted_amps &lt;-<span class="st"> </span>my_protein_df[my_prediction<span class="op">$</span>prob_AMP <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.8</span>,]</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
+<th></th>
 <th align="left">seq_name</th>
 <th align="left">seq_aa</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">G1P6H5_MYOLU</td>
-<td align="left">MALTVRIQAACLLLLLLASLTSYSLLLSQTTQLADLQTQDTAGAT…</td>
+<td>2</td>
+<td align="left">tr|L5L3D0|L5L3D0_PTEAL</td>
+<td align="left">MKPLLIVFVFLIFWDPALAGLNPISSEMYKKCYGNGICRLECYTS…</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td align="left">tr|Q5F4I1|Q5F4I1_DROPS</td>
+<td align="left">MNFYKIFIFVALILAISVGQSEAGWLKKLGKRLERVGQHTRDATI…</td>
 </tr>
 </tbody>
 </table>
 <p>Write the <code>data.frame</code> with sequence names in the first column and protein sequences in the second column to a FASTA formatted file with <code>df_to_faa()</code></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">df_to_faa</span>(my_predicted_amps, <span class="kw">tempfile</span>(<span class="st">&quot;my_predicted_amps&quot;</span>, <span class="kw">tempdir</span>()))</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">df_to_faa</span>(my_predicted_amps, <span class="kw">tempfile</span>(<span class="st">&quot;my_predicted_amps.fasta&quot;</span>, <span class="kw">tempdir</span>()))</a></code></pre></div>
 </div>
 </div>
 
