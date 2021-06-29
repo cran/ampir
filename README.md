@@ -7,13 +7,16 @@
 
 <!-- badges: start -->
 
+[![](https://img.shields.io/badge/Shiny-ampir-blue?style=flat&labelColor=white&logo=RStudio&logoColor=blue)](https://ampir.marine-omics.net/)
+[![](https://img.shields.io/badge/doi-10.1093/bioinformatics/btaa653-yellow.svg)](https://doi.org/10.1093/bioinformatics/btaa653)
 [![Travis build
-status](https://travis-ci.org/Legana/ampir.svg?branch=master)](https://travis-ci.org/Legana/ampir)
+status](https://travis-ci.com/Legana/ampir.svg?branch=master)](https://travis-ci.com/Legana/ampir)
 [![codecov](https://codecov.io/gh/Legana/ampir/branch/master/graph/badge.svg)](https://codecov.io/gh/Legana/ampir)
 [![License: GPL
 v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
-[![CRAN\_Release\_Badge](http://www.r-pkg.org/badges/version-ago/ampir)](https://CRAN.R-project.org/package=ampir?color=yellow)
-![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/grand-total/ampir?color=red)
+[![CRAN_Release_Badge](http://www.r-pkg.org/badges/version-ago/ampir)](https://CRAN.R-project.org/package=ampir?color=yellow)
+![CRAN_Download_Badge](http://cranlogs.r-pkg.org/badges/grand-total/ampir?color=red)
+[![](http://cranlogs.r-pkg.org/badges/last-month/ampir?color=green)](https://cran.r-project.org/package=ampir)
 <!-- badges: end -->
 
 The **ampir** (short for **a**nti**m**icrobial **p**eptide prediction
@@ -27,10 +30,19 @@ model, “precursor” is best suited for full length proteins and the
 “mature” model is best suited for small mature proteins (\<60 amino
 acids). **ampir** also accepts custom (user trained) models based on the
 [caret](https://github.com/topepo/caret) package. Please see the
-**ampir** *“How to train your model”* vignette for details.
+**ampir** *“How to train your model”*
+[vignette](https://CRAN.R-project.org/package=ampir/vignettes/train_model.html)
+for details.
 
-ampir’s associated paper is available as a preprint on
-[bioRxiv](https://doi.org/10.1101/2020.05.07.082412)
+ampir’s associated paper is published in the *Bioinformatics* journal as
+[btaa653](https://academic.oup.com/bioinformatics/article-abstract/doi/10.1093/bioinformatics/btaa653/5873588).
+Please cite this paper if you use ampir in your research.
+
+ampir is also available via a Shiny based GUI at
+<https://ampir.marine-omics.net/> where users can submit protein
+sequences in FASTA file format to be classified by either the
+“precursor” or “mature” model. The prediction results can then be
+downloaded as a csv file.
 
 ## Installation
 
@@ -57,23 +69,22 @@ library(ampir)
 Standard input to **ampir** is a `data.frame` with sequence names in the
 first column and protein sequences in the second column.
 
-Read in a FASTA formatted file as a `data.frame` with
-`read_faa()`
+Read in a FASTA formatted file as a `data.frame` with `read_faa()`
 
 ``` r
 my_protein_df <- read_faa(system.file("extdata/little_test.fasta", package = "ampir"))
 ```
 
-| seq\_name         | seq\_aa                                        |
-| :---------------- | :--------------------------------------------- |
-| G1P6H5\_MYOLU     | MALTVRIQAACLLLLLLASLTSYSLLLSQTTQLADLQTQDTAGAT… |
-| L5L3D0\_PTEAL     | MKPLLIVFVFLIFWDPALAGLNPISSEMYKKCYGNGICRLECYTS… |
-| A0A183U1F1\_TOXCA | LLRLYSPLVMFATRRVLLCLLVIYLLAQPIHSSWLKKTYKKLENS… |
-| Q5F4I1\_DROPS     | MNFYKIFIFVALILAISVGQSEAGWLKKLGKRLERVGQHTRDATI… |
-| A7S075\_NEMVE     | MFLKVVVVLLAVELSVAQSARQRVRPLDRKAGRKRFAPIFPRQCS… |
-| F1DFM9\_9CNID     | MKVLVILFGAMLVLMEFQKASAATLLEDFDDDDDLLDDGGDFDLE… |
-| Q5XV93\_ARATH     | MSKREYERQLANEEDEQLRNFQAAVAARSAILHEPKEAALPPPAP… |
-| Q2XXN9\_POGBA     | MRFLYLLFAVAFLFSVQAEDAELEQEQQGDPWEGLDEFQDQPPDD… |
+| seq_name         | seq_aa                                         |
+|:-----------------|:-----------------------------------------------|
+| G1P6H5_MYOLU     | MALTVRIQAACLLLLLLASLTSYSLLLSQTTQLADLQTQDTAGAT… |
+| L5L3D0_PTEAL     | MKPLLIVFVFLIFWDPALAGLNPISSEMYKKCYGNGICRLECYTS… |
+| A0A183U1F1_TOXCA | LLRLYSPLVMFATRRVLLCLLVIYLLAQPIHSSWLKKTYKKLENS… |
+| Q5F4I1_DROPS     | MNFYKIFIFVALILAISVGQSEAGWLKKLGKRLERVGQHTRDATI… |
+| A7S075_NEMVE     | MFLKVVVVLLAVELSVAQSARQRVRPLDRKAGRKRFAPIFPRQCS… |
+| F1DFM9_9CNID     | MKVLVILFGAMLVLMEFQKASAATLLEDFDDDDDLLDDGGDFDLE… |
+| Q5XV93_ARATH     | MSKREYERQLANEEDEQLRNFQAAVAARSAILHEPKEAALPPPAP… |
+| Q2XXN9_POGBA     | MRFLYLLFAVAFLFSVQAEDAELEQEQQGDPWEGLDEFQDQPPDD… |
 
 Calculate the probability that each protein is an antimicrobial peptide
 with `predict_amps()`. Since these proteins are all full length
@@ -82,35 +93,34 @@ precursor model.
 
 *Note that amino acid sequences that are shorter than 10 amino acids
 long and/or contain anything other than the standard 20 amino acids are
-not evaluated and will contain an `NA` as their `prob_AMP`
-value.*
+not evaluated and will contain an `NA` as their `prob_AMP` value.*
 
 ``` r
 my_prediction <- predict_amps(my_protein_df, model = "precursor")
 ```
 
-| seq\_name         | seq\_aa                                        | prob\_AMP |
-| :---------------- | :--------------------------------------------- | --------: |
-| G1P6H5\_MYOLU     | MALTVRIQAACLLLLLLASLTSYSLLLSQTTQLADLQTQDTAGAT… |     0.359 |
-| L5L3D0\_PTEAL     | MKPLLIVFVFLIFWDPALAGLNPISSEMYKKCYGNGICRLECYTS… |     0.839 |
-| A0A183U1F1\_TOXCA | LLRLYSPLVMFATRRVLLCLLVIYLLAQPIHSSWLKKTYKKLENS… |     0.019 |
-| Q5F4I1\_DROPS     | MNFYKIFIFVALILAISVGQSEAGWLKKLGKRLERVGQHTRDATI… |     0.986 |
-| A7S075\_NEMVE     | MFLKVVVVLLAVELSVAQSARQRVRPLDRKAGRKRFAPIFPRQCS… |     0.023 |
-| F1DFM9\_9CNID     | MKVLVILFGAMLVLMEFQKASAATLLEDFDDDDDLLDDGGDFDLE… |     0.237 |
-| Q5XV93\_ARATH     | MSKREYERQLANEEDEQLRNFQAAVAARSAILHEPKEAALPPPAP… |     0.010 |
-| Q2XXN9\_POGBA     | MRFLYLLFAVAFLFSVQAEDAELEQEQQGDPWEGLDEFQDQPPDD… |     0.650 |
+| seq_name         | seq_aa                                         | prob_AMP |
+|:-----------------|:-----------------------------------------------|---------:|
+| G1P6H5_MYOLU     | MALTVRIQAACLLLLLLASLTSYSLLLSQTTQLADLQTQDTAGAT… |    0.612 |
+| L5L3D0_PTEAL     | MKPLLIVFVFLIFWDPALAGLNPISSEMYKKCYGNGICRLECYTS… |    0.945 |
+| A0A183U1F1_TOXCA | LLRLYSPLVMFATRRVLLCLLVIYLLAQPIHSSWLKKTYKKLENS… |    0.088 |
+| Q5F4I1_DROPS     | MNFYKIFIFVALILAISVGQSEAGWLKKLGKRLERVGQHTRDATI… |    0.998 |
+| A7S075_NEMVE     | MFLKVVVVLLAVELSVAQSARQRVRPLDRKAGRKRFAPIFPRQCS… |    0.032 |
+| F1DFM9_9CNID     | MKVLVILFGAMLVLMEFQKASAATLLEDFDDDDDLLDDGGDFDLE… |    0.223 |
+| Q5XV93_ARATH     | MSKREYERQLANEEDEQLRNFQAAVAARSAILHEPKEAALPPPAP… |    0.009 |
+| Q2XXN9_POGBA     | MRFLYLLFAVAFLFSVQAEDAELEQEQQGDPWEGLDEFQDQPPDD… |    0.733 |
 
 Predicted proteins with a specified predicted probability value could
 then be extracted and written to a FASTA file:
 
 ``` r
-my_predicted_amps <- my_protein_df[my_prediction$prob_AMP >= 0.8,]
+my_predicted_amps <- my_protein_df[which(my_prediction$prob_AMP >= 0.8),]
 ```
 
-|   | seq\_name     | seq\_aa                                        |
-| - | :------------ | :--------------------------------------------- |
-| 2 | L5L3D0\_PTEAL | MKPLLIVFVFLIFWDPALAGLNPISSEMYKKCYGNGICRLECYTS… |
-| 4 | Q5F4I1\_DROPS | MNFYKIFIFVALILAISVGQSEAGWLKKLGKRLERVGQHTRDATI… |
+|     | seq_name     | seq_aa                                         |
+|:----|:-------------|:-----------------------------------------------|
+| 2   | L5L3D0_PTEAL | MKPLLIVFVFLIFWDPALAGLNPISSEMYKKCYGNGICRLECYTS… |
+| 4   | Q5F4I1_DROPS | MNFYKIFIFVALILAISVGQSEAGWLKKLGKRLERVGQHTRDATI… |
 
 Write the `data.frame` with sequence names in the first column and
 protein sequences in the second column to a FASTA formatted file with

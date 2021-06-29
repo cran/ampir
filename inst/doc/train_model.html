@@ -12,34 +12,53 @@
 
 <meta name="author" content="Legana Fingerhut" />
 
-<meta name="date" content="2020-05-11" />
+<meta name="date" content="2021-06-29" />
 
 <title>How to train your model</title>
 
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 
-<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -48,9 +67,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -107,187 +126,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<style type="text/css">body {
-background-color: #fff;
-margin: 1em auto;
-max-width: 700px;
-overflow: visible;
-padding-left: 2em;
-padding-right: 2em;
-font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-font-size: 14px;
-line-height: 1.35;
-}
-#TOC {
-clear: both;
-margin: 0 0 10px 10px;
-padding: 4px;
-width: 400px;
-border: 1px solid #CCCCCC;
-border-radius: 5px;
-background-color: #f6f6f6;
-font-size: 13px;
-line-height: 1.3;
-}
-#TOC .toctitle {
-font-weight: bold;
-font-size: 15px;
-margin-left: 5px;
-}
-#TOC ul {
-padding-left: 40px;
-margin-left: -1.5em;
-margin-top: 5px;
-margin-bottom: 5px;
-}
-#TOC ul ul {
-margin-left: -2em;
-}
-#TOC li {
-line-height: 16px;
-}
-table {
-margin: 1em auto;
-border-width: 1px;
-border-color: #DDDDDD;
-border-style: outset;
-border-collapse: collapse;
-}
-table th {
-border-width: 2px;
-padding: 5px;
-border-style: inset;
-}
-table td {
-border-width: 1px;
-border-style: inset;
-line-height: 18px;
-padding: 5px 5px;
-}
-table, table th, table td {
-border-left-style: none;
-border-right-style: none;
-}
-table thead, table tr.even {
-background-color: #f7f7f7;
-}
-p {
-margin: 0.5em 0;
-}
-blockquote {
-background-color: #f6f6f6;
-padding: 0.25em 0.75em;
-}
-hr {
-border-style: solid;
-border: none;
-border-top: 1px solid #777;
-margin: 28px 0;
-}
-dl {
-margin-left: 0;
-}
-dl dd {
-margin-bottom: 13px;
-margin-left: 13px;
-}
-dl dt {
-font-weight: bold;
-}
-ul {
-margin-top: 0;
-}
-ul li {
-list-style: circle outside;
-}
-ul ul {
-margin-bottom: 0;
-}
-pre, code {
-background-color: #f7f7f7;
-border-radius: 3px;
-color: #333;
-white-space: pre-wrap; 
-}
-pre {
-border-radius: 3px;
-margin: 5px 0px 10px 0px;
-padding: 10px;
-}
-pre:not([class]) {
-background-color: #f7f7f7;
-}
-code {
-font-family: Consolas, Monaco, 'Courier New', monospace;
-font-size: 85%;
-}
-p > code, li > code {
-padding: 2px 0px;
-}
-div.figure {
-text-align: center;
-}
-img {
-background-color: #FFFFFF;
-padding: 2px;
-border: 1px solid #DDDDDD;
-border-radius: 3px;
-border: 1px solid #CCCCCC;
-margin: 0 5px;
-}
-h1 {
-margin-top: 0;
-font-size: 35px;
-line-height: 40px;
-}
-h2 {
-border-bottom: 4px solid #f7f7f7;
-padding-top: 10px;
-padding-bottom: 2px;
-font-size: 145%;
-}
-h3 {
-border-bottom: 2px solid #f7f7f7;
-padding-top: 10px;
-font-size: 120%;
-}
-h4 {
-border-bottom: 1px solid #f7f7f7;
-margin-left: 8px;
-font-size: 105%;
-}
-h5, h6 {
-border-bottom: 1px solid #ccc;
-font-size: 105%;
-}
-a {
-color: #0033dd;
-text-decoration: none;
-}
-a:hover {
-color: #6666ff; }
-a:visited {
-color: #800080; }
-a:visited:hover {
-color: #BB00BB; }
-a[href^="http:"] {
-text-decoration: underline; }
-a[href^="https:"] {
-text-decoration: underline; }
 
-code > span.kw { color: #555; font-weight: bold; } 
-code > span.dt { color: #902000; } 
-code > span.dv { color: #40a070; } 
-code > span.bn { color: #d14; } 
-code > span.fl { color: #d14; } 
-code > span.ch { color: #d14; } 
-code > span.st { color: #d14; } 
-code > span.co { color: #888888; font-style: italic; } 
-code > span.ot { color: #007020; } 
-code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; } 
-code > span.er { color: #a61717; background-color: #e3d2d2; } 
-</style>
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
 
 
 
@@ -301,7 +141,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">How to train your model</h1>
 <h4 class="author">Legana Fingerhut</h4>
-<h4 class="date">2020-05-11</h4>
+<h4 class="date">2021-06-29</h4>
 
 
 
@@ -320,10 +160,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <li>add “positive” label</li>
 <li>remove non standard amino acids</li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(ampir)</a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">bat_pos &lt;-<span class="st"> </span><span class="kw">read_faa</span>(<span class="kw">system.file</span>(<span class="st">&quot;extdata/bat_positive.fasta.gz&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;ampir&quot;</span>))</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">bat_pos<span class="op">$</span>Label &lt;-<span class="st"> &quot;Positive&quot;</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">bat_pos &lt;-<span class="st"> </span><span class="kw">remove_nonstandard_aa</span>(bat_pos)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ampir)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>bat_pos <span class="ot">&lt;-</span> <span class="fu">read_faa</span>(<span class="fu">system.file</span>(<span class="st">&quot;extdata/bat_positive.fasta.gz&quot;</span>, <span class="at">package =</span> <span class="st">&quot;ampir&quot;</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>bat_pos<span class="sc">$</span>Label <span class="ot">&lt;-</span> <span class="st">&quot;Positive&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>bat_pos <span class="ot">&lt;-</span> <span class="fu">remove_nonstandard_aa</span>(bat_pos)</span></code></pre></div>
 <p>For the negative dataset:</p>
 <ul>
 <li>read data</li>
@@ -332,34 +172,34 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <li>remove sequences (if any) that are also present in the positive dataset</li>
 <li>randomly select the same number of sequences that are in the positive dataset</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">bat_neg &lt;-<span class="st"> </span><span class="kw">read_faa</span>(<span class="kw">system.file</span>(<span class="st">&quot;extdata/bat_negative.fasta.gz&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;ampir&quot;</span>))</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">bat_neg<span class="op">$</span>Label &lt;-<span class="st"> &quot;Negative&quot;</span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">bat_neg &lt;-<span class="st"> </span><span class="kw">remove_nonstandard_aa</span>(bat_neg)</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">bat_neg &lt;-<span class="st"> </span>bat_neg[<span class="op">!</span>bat_neg<span class="op">$</span>seq_aa <span class="op">%in%</span><span class="st"> </span>bat_pos<span class="op">$</span>seq_aa,]</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">bat_neg &lt;-<span class="st"> </span>bat_neg[<span class="kw">sample</span>(<span class="kw">nrow</span>(bat_neg),<span class="dv">78</span>),]</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>bat_neg <span class="ot">&lt;-</span> <span class="fu">read_faa</span>(<span class="fu">system.file</span>(<span class="st">&quot;extdata/bat_negative.fasta.gz&quot;</span>, <span class="at">package =</span> <span class="st">&quot;ampir&quot;</span>))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>bat_neg<span class="sc">$</span>Label <span class="ot">&lt;-</span> <span class="st">&quot;Negative&quot;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>bat_neg <span class="ot">&lt;-</span> <span class="fu">remove_nonstandard_aa</span>(bat_neg)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>bat_neg <span class="ot">&lt;-</span> bat_neg[<span class="sc">!</span>bat_neg<span class="sc">$</span>seq_aa <span class="sc">%in%</span> bat_pos<span class="sc">$</span>seq_aa,]</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>bat_neg <span class="ot">&lt;-</span> bat_neg[<span class="fu">sample</span>(<span class="fu">nrow</span>(bat_neg),<span class="dv">78</span>),]</span></code></pre></div>
 <p>Combine the positive and negative dataset</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">bats &lt;-<span class="st"> </span><span class="kw">rbind</span>(bat_pos, bat_neg)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>bats <span class="ot">&lt;-</span> <span class="fu">rbind</span>(bat_pos, bat_neg)</span></code></pre></div>
 <p>Calculate features on the combined positive and negative dataset and add the label column</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">bats_features &lt;-<span class="st"> </span><span class="kw">calculate_features</span>(bats)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">bats_features<span class="op">$</span>Label &lt;-<span class="st"> </span><span class="kw">as.factor</span>(bats<span class="op">$</span>Label)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="kw">rownames</span>(bats_features) &lt;-<span class="st"> </span><span class="ot">NULL</span></a></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">library</span>(caret)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>bats_features <span class="ot">&lt;-</span> <span class="fu">calculate_features</span>(bats)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>bats_features<span class="sc">$</span>Label <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(bats<span class="sc">$</span>Label)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(bats_features) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span></code></pre></div>
 <p>Split feature set data and create train and test set with <code>caret</code></p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">trainIndex &lt;-<span class="kw">createDataPartition</span>(<span class="dt">y=</span>bats_features<span class="op">$</span>Label, <span class="dt">p=</span>.<span class="dv">7</span>, <span class="dt">list =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">bats_featuresTrain &lt;-bats_features[trainIndex,]</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">bats_featuresTest &lt;-bats_features[<span class="op">-</span>trainIndex,]</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>trainIndex <span class="ot">&lt;-</span><span class="fu">createDataPartition</span>(<span class="at">y=</span>bats_features<span class="sc">$</span>Label, <span class="at">p=</span>.<span class="dv">7</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>bats_featuresTrain <span class="ot">&lt;-</span>bats_features[trainIndex,]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>bats_featuresTest <span class="ot">&lt;-</span>bats_features[<span class="sc">-</span>trainIndex,]</span></code></pre></div>
 <p>Resample method using repeated cross validation and adding in a probability calculation with <code>caret</code></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">trctrl_prob &lt;-<span class="st"> </span><span class="kw">trainControl</span>(<span class="dt">method =</span> <span class="st">&quot;repeatedcv&quot;</span>, <span class="dt">number =</span> <span class="dv">10</span>, <span class="dt">repeats =</span> <span class="dv">3</span>,</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">                            <span class="dt">classProbs =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>trctrl_prob <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;repeatedcv&quot;</span>, <span class="at">number =</span> <span class="dv">10</span>, <span class="at">repeats =</span> <span class="dv">3</span>,</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">classProbs =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p>Train model using a support vector machine with radial kernel with <code>caret</code>. <em>Note: Other classification models are supported too. For example, to use a <a href="https://topepo.github.io/caret/train-models-by-tag.html#random-forest">random forest model in <code>caret</code></a>, <code>method</code> could be changed from “svmRadial” to “ranger”.</em></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">my_bat_svm_model &lt;-<span class="st"> </span><span class="kw">train</span>(Label<span class="op">~</span>.,</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">                       <span class="dt">data =</span> bats_featuresTrain[,<span class="op">-</span><span class="dv">1</span>], <span class="co"># excluding seq_name column</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">                       <span class="dt">method=</span><span class="st">&quot;svmRadial&quot;</span>,</a>
-<a class="sourceLine" id="cb9-4" data-line-number="4">                       <span class="dt">trControl =</span> trctrl_prob,</a>
-<a class="sourceLine" id="cb9-5" data-line-number="5">                       <span class="dt">preProcess =</span> <span class="kw">c</span>(<span class="st">&quot;center&quot;</span>, <span class="st">&quot;scale&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>my_bat_svm_model <span class="ot">&lt;-</span> <span class="fu">train</span>(Label<span class="sc">~</span>.,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">data =</span> bats_featuresTrain[,<span class="sc">-</span><span class="dv">1</span>], <span class="co"># excluding seq_name column</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">method=</span><span class="st">&quot;svmRadial&quot;</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">trControl =</span> trctrl_prob,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">preProcess =</span> <span class="fu">c</span>(<span class="st">&quot;center&quot;</span>, <span class="st">&quot;scale&quot;</span>))</span></code></pre></div>
 <p>Test model to get an indication of how well the model performs on test data with <code>caret</code></p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">my_bat_pred &lt;-<span class="st"> </span><span class="kw">predict</span>(my_bat_svm_model, bats_featuresTest)</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">cm &lt;-<span class="st"> </span><span class="kw">confusionMatrix</span>(my_bat_pred, bats_featuresTest<span class="op">$</span>Label, <span class="dt">positive =</span> <span class="st">&quot;Positive&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>my_bat_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(my_bat_svm_model, bats_featuresTest)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>cm <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(my_bat_pred, bats_featuresTest<span class="sc">$</span>Label, <span class="at">positive =</span> <span class="st">&quot;Positive&quot;</span>)</span></code></pre></div>
 <p><em>Subset from <code>cm$byClass</code></em></p>
 <table>
 <thead>
@@ -373,22 +213,22 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <tbody>
 <tr class="odd">
 <td align="center">0.98</td>
-<td align="center">1</td>
 <td align="center">0.96</td>
+<td align="center">1</td>
 <td align="center">0.98</td>
 </tr>
 </tbody>
 </table>
 <p>Convert the bat feature test data to the original FASTA type format containing just the sequence name and sequence as this is the required input data for <code>ampir</code></p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">bat_test_set &lt;-<span class="st"> </span>bats[bats<span class="op">$</span>seq_name <span class="op">%in%</span><span class="st"> </span>bats_featuresTest<span class="op">$</span>seq_name,][,<span class="op">-</span><span class="dv">3</span>]</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw">rownames</span>(bat_test_set) &lt;-<span class="st"> </span><span class="ot">NULL</span></a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>bat_test_set <span class="ot">&lt;-</span> bats[bats<span class="sc">$</span>seq_name <span class="sc">%in%</span> bats_featuresTest<span class="sc">$</span>seq_name,][,<span class="sc">-</span><span class="dv">3</span>]</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(bat_test_set) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span></code></pre></div>
 <p>Use the trained bat model in <code>ampir</code>’s <code>predict_amps</code> function on the bat test set</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">my_bat_AMPs &lt;-<span class="st"> </span><span class="kw">predict_amps</span>(bat_test_set, <span class="dt">min_len =</span> <span class="dv">5</span>, <span class="dt">model =</span> my_bat_svm_model)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>my_bat_AMPs <span class="ot">&lt;-</span> <span class="fu">predict_amps</span>(bat_test_set, <span class="at">min_len =</span> <span class="dv">5</span>, <span class="at">model =</span> my_bat_svm_model)</span></code></pre></div>
 <p><em><code>my_bat_AMPs</code> sample</em></p>
 <table>
 <thead>
 <tr class="header">
-<th></th>
+<th align="left"></th>
 <th align="left">seq_name</th>
 <th align="left">seq_aa</th>
 <th align="right">prob_AMP</th>
@@ -396,40 +236,40 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </thead>
 <tbody>
 <tr class="odd">
-<td>1</td>
+<td align="left">1</td>
+<td align="left">G1PHN9…</td>
+<td align="left">MKIYYYLLHF…</td>
+<td align="right">0.996</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
 <td align="left">G1P1T7…</td>
 <td align="left">MKALLTLGLL…</td>
-<td align="right">0.999</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td align="left">G1NZQ6…</td>
-<td align="left">MKLFLILIIL…</td>
-<td align="right">0.986</td>
+<td align="right">0.984</td>
 </tr>
 <tr class="odd">
-<td>3</td>
-<td align="left">U3KZW3…</td>
-<td align="left">MKSLLILGLL…</td>
-<td align="right">0.998</td>
+<td align="left">3</td>
+<td align="left">G1QAP4…</td>
+<td align="left">MKALLTLGLL…</td>
+<td align="right">0.981</td>
 </tr>
 <tr class="even">
-<td>44</td>
-<td align="left">P14392…</td>
+<td align="left">44</td>
+<td align="left">Q95727…</td>
+<td align="left">MTNIRKTHPL…</td>
+<td align="right">0.018</td>
+</tr>
+<tr class="odd">
+<td align="left">45</td>
+<td align="left">P14391…</td>
 <td align="left">VHLSGEEKAA…</td>
-<td align="right">0.010</td>
-</tr>
-<tr class="odd">
-<td>45</td>
-<td align="left">Q7I5M1…</td>
-<td align="left">MALIYTNTLL…</td>
-<td align="right">0.014</td>
+<td align="right">0.025</td>
 </tr>
 <tr class="even">
-<td>46</td>
-<td align="left">B2KI57…</td>
-<td align="left">MEPFSSKSLA…</td>
-<td align="right">0.050</td>
+<td align="left">46</td>
+<td align="left">Q330H3…</td>
+<td align="left">MNPYIFFIIM…</td>
+<td align="right">0.024</td>
 </tr>
 </tbody>
 </table>
